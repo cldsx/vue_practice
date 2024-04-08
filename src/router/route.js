@@ -18,13 +18,18 @@ const frameIn = [
         path: '/companyBank',
         name: 'companyBank',
         component: () => import('../views/companyBank.vue')
-    }
+    },
+    {
+        path: '/pdfPreview',
+        name: 'pdfPreview',
+        component: () => import('../views/pdfPreview.vue')
+    },
 ];
 
-const webHotUpdateModule=[
+const webHotUpdateModule = [
     module1,
 ]
 
 
 
-export default [...frameIn,...webHotUpdateModule]
+export default [...frameIn, ...webHotUpdateModule]

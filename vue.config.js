@@ -2,7 +2,8 @@ module.exports = {
     publicPath: './',
     assetsDir: './src/',
     lintOnSave: false,
+    transpileDependencies: ['pdfjs-dist'],
     devServer: {
-        port: 20000
+        port: 20001
     }
 }

@@ -36,9 +36,9 @@
         只能上传jpg/png文件，且不超过500kb
       </div>
     </el-upload> -->
-  
-  <div @click="handleclick">点击</div>
-  
+    <div v-html="htmlTxt"></div>
+    <div @click="handleclick">点击</div>
+    <div class="text">文本吧文本文本为保卫呢吧</div>
   </div>
 </template>
 <script>
@@ -54,15 +54,16 @@ export default {
     return {
       show: true,
       fileList: [],
+      htmlTxt: "<span style='color:red'>aaaaaBBBBB</span> ",
     };
   },
 
   methods: {
-    handleclick(){
-       var aareg=/icon-/g
-       var bb="圆钻元"
-       console.log(aareg.test(bb))
-       this.$router.push({name:'moduleOne'})
+    handleclick() {
+      var aareg = /icon-/g;
+      var bb = "圆钻元";
+      console.log(aareg.test(bb));
+      this.$router.push({ name: "moduleOne" });
     },
     checkc() {
       this.show = !this.show;
@@ -91,5 +92,10 @@ export default {
 .testshow {
   padding: 10px 10px;
   background-color: aqua;
+}
+.text {
+  width: 200px;
+  height: 475px;
+  transform: translateY(50%);
 }
 </style>

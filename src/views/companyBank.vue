@@ -1,5 +1,11 @@
 <template>
-  <div class="about">
-    <h1>companyBank</h1>
+  <div class="test">
+    <!-- <h1>companyBank</h1> -->
+    <my-select></my-select>
   </div>
 </template>
+<style >
+.test{
+  width: 300px;
+}
+</style>
