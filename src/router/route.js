@@ -24,6 +24,12 @@ const frameIn = [
         name: 'pdfPreview',
         component: () => import('../views/pdfPreview.vue')
     },
+    {
+        path: '/snip',
+        name: 'snip',
+        component: () => import('../views/snip/index.vue')
+    },
+
 ];
 
 const webHotUpdateModule = [

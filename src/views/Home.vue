@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div @click="handleSnip">截图</div>
     <!-- <my-parent
       class="myhome"
       bute1="bute11"
@@ -59,6 +60,9 @@ export default {
   },
 
   methods: {
+    handleSnip() {
+      this.$router.push({ name: "snip" });
+    },
     handleclick() {
       var aareg = /icon-/g;
       var bb = "圆钻元";
