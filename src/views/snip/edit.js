@@ -42,19 +42,19 @@ export default function (base64, width, height, left, top) {
         }).fillRect(0, 0, width, height);
     }
 
-    // 编辑工具箱
-    var toolboxEl = document.createElement("div");
-    bodyEl.appendChild(toolboxEl);
-    toolboxEl.setAttribute("snipio", "toolbox");
+    // // 编辑工具箱
+    // var toolboxEl = document.createElement("div");
+    // bodyEl.appendChild(toolboxEl);
+    // toolboxEl.setAttribute("snipio", "toolbox");
 
-    setStyle(toolboxEl, {
-        position: "absolute",
-        left: left + 'px',
-        top: top + "px",
-        height: "30px",
-        backgroundColor: "white",
-        boxShadow: "0 0 5px 3px #607D8B",
-        zIndex: "9999999"
-    });
+    // setStyle(toolboxEl, {
+    //     position: "absolute",
+    //     left: left + 'px',
+    //     top: top + "px",
+    //     height: "30px",
+    //     backgroundColor: "white",
+    //     boxShadow: "0 0 5px 3px #607D8B",
+    //     zIndex: "9999999"
+    // });
 
 }

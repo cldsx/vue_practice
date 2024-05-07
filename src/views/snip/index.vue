@@ -9,7 +9,7 @@
       <div style="display: none">天花乱坠天花乱坠NOnenenenenenen</div>
       <div style="display: flex">
         <img class="img" src="@/assets/test.png" alt="" />
-        <img class="img" src="@/assets/test.jpg" alt="" />
+        <img class="img" src="@/assets/dragon.jpg" alt="" />
         <div class="back-img"></div>
       </div>
     </div>
