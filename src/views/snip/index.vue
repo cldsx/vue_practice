@@ -9,7 +9,7 @@
       <div style="display: none">天花乱坠天花乱坠NOnenenenenenen</div>
       <div style="display: flex">
         <img class="img" src="@/assets/test.png" alt="" />
-        <img class="img" src="@/assets/dragon.jpg" alt="" />
+        <!-- <img class="img" src="@/assets/dragon.jpg" alt="" /> -->
         <div class="back-img"></div>
       </div>
     </div>
@@ -27,7 +27,17 @@ export default {
   mounted() {},
   methods: {
     async handleClick() {
-      snipio();
+      snipio({
+        snipping: 'h5',
+        tool: [
+          {
+            label: "确认",
+            callback: function () {
+              console.log("你点击了确认按钮！");
+            },
+          },
+        ],
+      });
       // this.shotcut();
     },
     async shotcut() {

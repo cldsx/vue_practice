@@ -1,10 +1,9 @@
 import setStyle from "./xhtml/setStyle";
 import snipping from "./snipping/index";
-
+import Canvas from "./canvas"
 export default function (type, callback) {
     var bodyEl = document.getElementsByTagName("body")[0];
     var snippingEl = document.createElement("div");
-    var viewEl = document.createElement("div");
 
     bodyEl.appendChild(snippingEl);
     snippingEl.setAttribute("snipio", "snipping");
@@ -16,15 +15,12 @@ export default function (type, callback) {
         left: 0,
         top: 0,
         zIndex: 9999999,
-        backgroundColor: "rgb(0 0 0 / 4%)"
+        cursor: "none"
     });
 
-    snippingEl.appendChild(viewEl);
+    var painter = new Canvas(snippingEl);
+    var size = painter.getInfo();
 
-    setStyle(viewEl, {
-        position: "absolute",
-        backgroundColor: "rgb(0 0 0 / 10%)"
-    });
     var isSnipping = false; // 记录是否正在截图选择中
     var left, top; // 鼠标按下位置
     var width, height; // 区域尺寸
@@ -35,30 +31,95 @@ export default function (type, callback) {
 
         isSnipping = true;
     });
-    snippingEl.addEventListener('mousemove', function (event) {
+
+
+    snippingEl.addEventListener("mousemove", function (event) {
+        painter.clearRect(0, 0, size.width, size.height).config({
+            fillStyle: "rgb(0 0 0 / 67%)"
+        }).fillRect(0, 0, size.width, size.height);
+
+        var x = +(event.clientX).toFixed(0);
+        var y = +(event.clientY).toFixed(0);
+
         if (isSnipping) {
-            // 截图选择之后的宽高
-            width = event.clientX - left;
-            height = event.clientY - top;
+            width = x - left;
+            height = y - top;
+
             var _left = left, _top = top, _width = width, _height = height;
+
             if (_width <= 0) { _left += _width; _width *= -1; }
             if (_height <= 0) { _top += _height; _height *= -1; }
-            setStyle(viewEl, {
-                left: _left + "px",
-                top: _top + "px",
-                width: _width + "px",
-                height: _height + "px"
-            });
+
+            painter.clearRect(_left, _top, _width, _height);
         }
-    })
-    snippingEl.addEventListener('mouseup', function (event) {
-        if (width <= 0) { left += width; width *= -1; }
-        if (height <= 0) { top += height; height *= -1; }
 
-        bodyEl.removeChild(snippingEl);
-        snipping(left, top, width, height, bodyEl).then(function (base64) {
-            callback(base64, width, height,left,top);
-        });
-    })
+        var dist = 5;
 
-}
+        painter.config({
+            strokeStyle: "white",
+            fillStyle: "white",
+            lineWidth: 1,
+            fontSize: 10
+        }).beginPath().moveTo(x - 5, y).lineTo(x + 5, y).stroke()
+            .beginPath().moveTo(x, y - 5).lineTo(x, y + 5).stroke()
+            .fillText(x, x + dist + 10, y + dist + 5)
+            .fillText(y, x + dist + 10, y + dist + 15);
+    });
+
+    snippingEl.addEventListener("mouseup", function (event) {
+        if (isSnipping) {
+
+            // 结束的时候，进行校对
+            if (width <= 0) { left += width; width *= -1; }
+            if (height <= 0) { top += height; height *= -1; }
+
+            bodyEl.removeChild(snippingEl);
+
+            if (type == 'h5') {
+                snipping(left, top, width, height, bodyEl).then(function (base64) {
+                    callback(base64, width, height, left, top);
+                });
+            } else if (type == 'system') {
+                var videoEl = document.createElement('video');
+
+                // 获取屏幕内容
+                navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                    audio: false
+                }).then(function (stream) {
+
+                    // 视频流及时播放
+                    videoEl.srcObject = stream;
+                    videoEl.onloadedmetadata = function () {
+                        videoEl.play();
+                    };
+
+                    stream.getVideoTracks()[0].onended = function () {
+
+                        // 准备画布
+                        var canvas = document.createElement('canvas');
+                        canvas.setAttribute('width', width);
+                        canvas.setAttribute('height', height);
+
+                        var painter = canvas.getContext('2d');
+
+                        // 绘制
+                        painter.drawImage(videoEl, left + (event.screenX - event.clientX), top + (event.screenY - event.clientY), width, height, 0, 0, width, height);
+
+                        callback(canvas.toDataURL(), width, height);
+                    };
+
+
+                }).catch(function (event) {
+                    alert("取消截图或遇到错误\n\n" + event);
+                });
+
+            } else {
+                throw new Error("不合法的截图模式：" + type);
+            }
+
+            isSnipping = false;
+        }
+    });
+
+};
