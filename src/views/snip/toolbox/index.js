@@ -1,6 +1,8 @@
 import drawLine from "./drawLine";
 import drawMosaic from "./drawMosaic";
-
+import drawRect from "./drawRect";
+import drawText from "./drawText";
+import drawArrow from "./drawArrow";
 export default [
     {
         label: "撤销",
@@ -56,9 +58,68 @@ export default [
         hold: true
     },
     {
+        label: "矩形",
+        drawHistroy: {
+            rect: function (value) {
+                this.painter.config({
+                    strokeStyle: "red",
+                    lineWidth: 1.5
+                }).strokeRect(value.x, value.y, value.width, value.height)
+            }
+        },
+        callback: function () {
+            return drawRect();
+        },
+        hold: true
+    },
+    {
+        label: "文字",
+        drawHistroy: {
+            text: function (value) {
+                for (let index = 0; index < value.inputTexts.length; index++) {
+                    this.painter.config({
+                        fillStyle: "red",
+                        lineWidth: 1,
+                        fontSize: 14,
+                    }).fillText(value.inputTexts[index], value.textPosition[0], value.textPosition[1] + (index + 0.5) * 16)
+                }
+            }
+        },
+        callback: function () {
+            return drawText();
+        },
+        hold: true
+    },
+    {
+        label: "箭头",
+        drawHistroy: {
+            arrow: function (value) {
+                this.painter.config({
+                    strokeStyle: "red",
+                    lineWidth: 2
+                }).beginPath().moveTo(value.realX, value.realY)
+                    .lineTo(value.x, value.y).stroke()
+                this.painter.config({
+                    strokeStyle: "red",
+                    fillStyle: "red",
+                    lineWidth: 2
+                }).beginPath().moveTo(value.x, value.y)
+                    .lineTo(value.x - value.sideleftOffset, value.y - value.sidetopOffset)
+                    .lineTo(value.x + value.verleftOffset, value.y + value.vertopOffset)
+                    .lineTo(value.x + value.sideleftOffset, value.y + value.sidetopOffset)
+                    .lineTo(value.x, value.y).stroke().fill()
+            }
+        },
+        callback: function () {
+            return drawArrow();
+        },
+        hold: true
+    },
+    {
         label: "画笔",
         drawHistroy: {
             line: function (value) {
+                console.log('画笔', value)
                 this.painter.config({
                     strokeStyle: "red",
                     lineWidth: 2

@@ -8,9 +8,9 @@
       <div>天花乱坠天花乱坠</div>
       <div style="display: none">天花乱坠天花乱坠NOnenenenenenen</div>
       <div style="display: flex">
-        <img class="img" src="@/assets/test.png" alt="" />
-        <!-- <img class="img" src="@/assets/dragon.jpg" alt="" /> -->
-        <div class="back-img"></div>
+        <!-- <img class="img" src="@/assets/test.png" alt="" />
+        <img class="img" src="@/assets/dragon.jpg" alt="" />
+        <div class="back-img"></div> -->
       </div>
     </div>
     <button @click="handleClick">截图</button>
@@ -146,10 +146,10 @@ export default {
   width: 300px;
   height: 200px;
 }
-.back-img {
+/* .back-img {
   background-image: url("~@/assets/test.png");
   background-size: cover;
   width: 300px;
   height: 200px;
-}
+} */
 </style>

@@ -6,9 +6,22 @@ export default function (options) {
     options = options || {};
 
     var tool = mergeArray(_tool, options.tool || []);
+    // 页面截图方式
+    if (options.snipping == "h5") {
+        snipping("h5", function (base64, width, height, left, top) {
+            edit(base64, width, height, left, top, tool);
+        });
+    }
 
-    snipping("h5", function (base64, width, height, left, top) {
-        edit(base64, width, height, left, top, tool);
+    // 系统截图方式
+    else if (options.snipping == "system") {
+        snipping("system", function (base64, width, height) {
+            edit(base64, width, height, tool);
+        });
+    }
 
-    });
-}
+    // 不截图
+    else {
+        edit(null, window.innerWidth - 160, window.innerHeight - 160, tool);
+    }
+};

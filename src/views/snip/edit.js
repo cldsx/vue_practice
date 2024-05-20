@@ -2,12 +2,17 @@
 import Canvas from "./canvas";
 import setStyle from "./xhtml/setStyle";
 import { createMosaic } from "./tool/mosaic";
+
+
 export default function (base64, width, height, left, top, tool) {
-    console.log(base64, width, height, left, top)
     var bodyEl = document.getElementsByTagName("body")[0];
     var editEl = document.createElement("div");
     var viewEl = document.createElement("div");
-
+    // 辅助div用于mouseMove
+    var rectEl = document.createElement("div");
+    var inputEl = document.createElement("input")
+    var arrowEl = document.createElement("div")
+    var deltaEL = document.createElement("div")
     bodyEl.appendChild(editEl);
     editEl.setAttribute("snipio", "edit");
 
@@ -22,6 +27,8 @@ export default function (base64, width, height, left, top, tool) {
     });
 
     editEl.appendChild(viewEl);
+
+
     setStyle(viewEl, {
         position: "absolute",
         left: "calc(50vw - " + width * 0.5 + "px)",
@@ -30,7 +37,45 @@ export default function (base64, width, height, left, top, tool) {
         height: height + "px",
         backgroundColor: "white"
     });
-
+    viewEl.appendChild(rectEl)
+    viewEl.appendChild(inputEl)
+    viewEl.appendChild(arrowEl)
+    viewEl.appendChild(deltaEL)
+    setStyle(deltaEL, {
+        position: "fixed",
+        pointerEvents: "none",
+        // 'border-top': '20px solid transparent',
+        // 'border-bottom': '20px solid transparent',
+        // 'border-left': '20px solid red',
+        // 'border-right': '20px solid transparent',
+        width: '20px',
+        height: '20px',
+        background: 'linear-gradient(45deg, red, red 50%, transparent 50%, transparent 100%)',
+        display: 'none'
+    })
+    setStyle(arrowEl, {
+        position: "fixed",
+        pointerEvents: "none"
+    })
+    setStyle(inputEl, {
+        position: "fixed",
+        minHeight: "16px",
+        minWidth: '60px',
+        fontSize: "14px",
+        lineHeight: "16px",
+        outline: "none",
+        border: '1px solid red',
+        color: "red",
+        backgroundColor: 'transparent',
+        display: 'none'
+    });
+    inputEl.setAttribute('contentEditable', true)
+    setStyle(rectEl, {
+        position: "fixed",
+        borderStyle: "solid",
+        borderWidth: "2px",
+        pointerEvents: "none"
+    });
     var painter = new Canvas(viewEl);
 
     // 画布初始化绘制
@@ -48,7 +93,7 @@ export default function (base64, width, height, left, top, tool) {
     toolboxEl.setAttribute("snipio", "toolbox");
 
     setStyle(toolboxEl, {
-        position: "absolute",
+        position: "fixed",
         right: "calc(50vw - " + width * 0.5 + "px)",
         bottom: "calc(50vh - " + (height * 0.5 + 30) + "px)",
         height: "30px",
@@ -57,11 +102,12 @@ export default function (base64, width, height, left, top, tool) {
         zIndex: "9999999"
     });
 
-    // var mosaicBase64 = createMosaic(width, height);
-    // setStyle(viewEl, {
-    //     backgroundImage: "url(" + mosaicBase64 + ")",
-    //     backgroundSize: "100% auto"
-    // });
+    var mosaicBase64 = createMosaic(width, height);
+    setStyle(viewEl, {
+        backgroundImage: "url(" + mosaicBase64 + ")",
+        backgroundSize: "100% auto"
+    });
+
     var drawHistroy = {};
     for (var k = 0; k < tool.length; k++) {
         if (tool[k].drawHistroy) {
@@ -70,6 +116,8 @@ export default function (base64, width, height, left, top, tool) {
             }
         }
     }
+    console.log(drawHistroy)
+
     // 为工具箱提供的实例对象
     var instance = {
 
@@ -102,7 +150,11 @@ export default function (base64, width, height, left, top, tool) {
 
         // 画布节点
         view: viewEl,
-
+        // 辅助div
+        rectEl: rectEl,
+        inputEl: inputEl,
+        arrowEl: arrowEl,
+        deltaEL: deltaEL,
         // 画布尺寸
         width: width,
         height: height,
@@ -119,6 +171,7 @@ export default function (base64, width, height, left, top, tool) {
             bodyEl.removeChild(toolboxEl);
         }
     };
+
     // 注册的事件
     var on = {};
 
@@ -175,4 +228,5 @@ export default function (base64, width, height, left, top, tool) {
             });
         })(index);
     }
-}
+
+};

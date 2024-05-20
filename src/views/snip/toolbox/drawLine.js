@@ -9,7 +9,6 @@ export default function () {
             mouseDown: function (event) {
                 isDown = true;
                 var p = mousePosition(this.view, event);
-
                 this.painter.config({
                     strokeStyle: "red",
                     lineWidth: 2
@@ -27,7 +26,7 @@ export default function () {
             },
             mouseUp: function () {
                 isDown = false;
-
+                console.log("lineArr", line)
                 // 记录历史
                 this.history.push({
                     type: "line",

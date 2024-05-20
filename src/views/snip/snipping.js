@@ -22,13 +22,14 @@ export default function (type, callback) {
     var size = painter.getInfo();
 
     var isSnipping = false; // 记录是否正在截图选择中
-    var left, top; // 鼠标按下位置
+    var left, top, realLeft, realTop; // 鼠标按下位置
     var width, height; // 区域尺寸
 
     snippingEl.addEventListener("mousedown", function (event) {
+        console.log('真实top', document.documentElement.scrollTop)
         left = event.clientX;
         top = event.clientY;
-
+        realTop = event.clientY + document.documentElement.scrollTop;
         isSnipping = true;
     });
 
@@ -44,7 +45,6 @@ export default function (type, callback) {
         if (isSnipping) {
             width = x - left;
             height = y - top;
-
             var _left = left, _top = top, _width = width, _height = height;
 
             if (_width <= 0) { _left += _width; _width *= -1; }
